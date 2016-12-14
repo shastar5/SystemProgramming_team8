@@ -24,16 +24,25 @@ void type_practice(){
 
         //setting
         clear();
+	
+	//ui 구성
+	move(0, 0);
+	addstr("------------------------------------------------------------");
+	move(2, 0);
+	addstr("------------------------------------------------------------");
+
         for(j=0 ; j<10 ; j++){
-                move(j*3+2,space); //move 내에서는 무조건 j에는 *3을 붙이기 바람
+                move(j * 3 + space ,space); //move 내에서는 무조건 j에는 *3을 붙이기 바람
                 addstr(pr[j]); //행렬 내부에선 j만 적음
+		move(j * 3 + space + 2, 0);
+		addstr("------------------------------------------------------------");
         }
 
         //오타율 출력
-        move(0,space);
-        addstr("miss      |  accuracy     %");
+        move(1,space);
+        addstr("miss    0 |  accuracy    0%");
 
-        move(3,space);
+        move(4,space);
         refresh();
         j=0;
         i=space;
@@ -47,9 +56,9 @@ void type_practice(){
                 if( c[0] == 127 && i == space){}
                 else{
                         if( c[0]==127 && i != space ){
-                                move( j*3+2 , i-1 );
+                                move( j*3+space , i-1 );
                                 addch( pr[ j ][ i - 1 - space] );
-                                move( (j * 3) + 3 , i - 1);
+                                move( (j * 3) + space + 1 , i - 1);
                                 addch(' ');
                                 if(pi[j][i-1-space] == 1){
                                         miss--;
@@ -61,13 +70,13 @@ void type_practice(){
 
 						//틀렸을 경우
                         else if( c[0] != pr[j][i-space] ) {
-                                move(j*3+2,i);
+                                move(j*3+space,i);
 								//터미널색과 글자색 변경
                                 attron(COLOR_PAIR(1));
                                 addch(pr[j][i-space]);
 								//터미널색과 글자색 복구
                                 attroff(COLOR_PAIR(1));
-                                move((j*3)+3,i);
+                                move((j*3)+space+1,i);
                                 addch(c[0]);
                                 pi[j][i-space] = 1;
                                 refresh();
@@ -84,7 +93,7 @@ void type_practice(){
                         }
 
                         //오타율
-                        move(0,9);
+                        move(1,9);
                         if(miss<1000){
                                 if(miss >=100){
                                         missc[0] = miss/100 + '0';
@@ -103,13 +112,13 @@ void type_practice(){
                                 addstr(missc);
                         }
                         else{
-                                move(0,8);
+                                move(1,8);
                                 addstr("999+");
                         }
 
 
                         //정확도
-                        move(0,26);
+                        move(1,26);
                         if(total != 0){
                                 percent = (total - miss)*100/total;
                         }
@@ -132,13 +141,13 @@ void type_practice(){
                         addstr(accc);
 
                         i++; //커서 한 칸 옆으로
-                        move((j*3)+3,i);
+                        move((j*3)+space+1,i);
 
                         //문장의 끝에서 다음 줄로
                         if(pr[j][i-space] == '\0'){
                                 i = space; //space는 앞의 여백임
                                 j++; //j는 배열 기준이라서 1만 증가
-                                move((j*3)+3,i); //j*3은 화면 기준이라 *3을 추가
+                                move((j*3)+space+1,i); //j*3은 화면 기준이라 *3을 추가
                         }
 
                         refresh(); //화면 표시
