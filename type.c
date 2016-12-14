@@ -3,10 +3,10 @@
 #include <stdlib.h>
 #include <termios.h>
 #include <string.h>
+
+
 void init();
 void type_practice();
-void venezia_game();
-
 //void crmode();
 //void noecho();
 
@@ -15,6 +15,8 @@ int main(void)
 	int c;
 
 	initscr();
+	start_color();//터미널 글자색과 바탕색 초기화
+	init_pair(1, COLOR_RED, COLOR_BLACK);
 	//cursres 호출
 
 	fflush(stdin);
@@ -36,7 +38,7 @@ int main(void)
 			addstr("\b");
 			refresh();
 		}
-
+		init();
 	}
 
 	endwin();
@@ -47,6 +49,8 @@ void type_practice(){
 	int i=0,j=0;
 	char c[2]=" ";
 	int space = 3;
+	int end = 10;
+
 	char pr[11][100] = {
 		"The difficulty in life is the choice.",
 		"Give me liberty or give me death.",
@@ -76,14 +80,24 @@ void type_practice(){
 	//start
 	while(1) {
 		c[0] = getchar();
-		if(c[0] != pr[j][i-space]){
+		if( strcmp(c[0],'\b') == 0 && i != 0){
+			move(j*3,i-1);
+			addstr("");
+			move(j*3, i-1);
+		}
+		else if( c[0] != pr[j][i-space] ) {//틀렸을 경우
                         move(j*3,i);
-                        addstr("/");
+			attron(COLOR_PAIR(1));//터미널색과 글자색 변경
+			addch(pr[j][i-space]);
+			attroff(COLOR_PAIR(1));//터미널색과 글자색 복구
                         move((j*3)+1,i);
-                        addstr(c);
+                        addch(c[0]);
+
+			refresh();
                 }
-		else {
-			addstr(c);
+		else {//맞을 경우
+			addch(c[0]);
+			refresh();
 		}
 
 		i++; //커서 한 칸 옆으로
@@ -101,12 +115,11 @@ void type_practice(){
 		}
 		*/
 		refresh();
+		if(j == end)
+			break;
 	}
 }
-void venezia_game(){ 
 
-
-}
 void init()
 {
 	clear();
