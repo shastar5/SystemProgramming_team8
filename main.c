@@ -19,7 +19,7 @@ int main(void)
         while(1) {
                 c = getchar();
                 if(c == '1') {
-                //venezia_game();
+			venezia_game();
                 }
 
                 else if(c == '2')
