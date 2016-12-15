@@ -11,6 +11,7 @@ typedef struct drop_word{
 	int col;
 }drop_word;
 
+int length=0;
 int score=0;
 int scoreText[3];
 int life = 10;
@@ -32,6 +33,7 @@ drop_word *drop;
 
 void init_venezia()
 {
+	length = 0;
 	score = 0;
 	life = 10;
 	strcpy(scoreText, "0");
@@ -73,6 +75,12 @@ void print(void *none)
 			{
 				move(drop[j].row,drop[j].col);
 				addstr(drop[j].words);
+				if(j==49)
+				{
+					move(drop[j].row-1, 0);
+					for(k=0; k<COLS; k++)
+						addstr(" ");
+				}
 				if(drop[j].row == LINES-3)
 				{
 					drop[j].exist = false;
@@ -87,7 +95,17 @@ void print(void *none)
 						break;
 				}
 			}
+			else
+			{
+				if(j==49)
+				{
+					move(drop[j].row-1, 0);
+					for(k=0; k<COLS; k++)
+						addstr(" ");
+				}	
+			}
 			drop[j].row++;
+			move(LINES-1, (COLS-1)/2+length);
 			refresh();
 			if((score+10-life)==50)
 				break;
@@ -98,6 +116,7 @@ void print(void *none)
 }
 void find(char *str)
 {
+	int k=0;
 	for(j=0; j<i; j++)
 	{
 		if(drop[j].exist == true && !strcmp(drop[j].words, str))
@@ -117,7 +136,6 @@ void find(char *str)
 
 void venezia_game(){	
 	pthread_t t1;
-	int length = 20;
 	char input[20]= {0};
 	int o;
 	int k;
